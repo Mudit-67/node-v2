@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { CalcDto } from './calc.dto';
 
 @Injectable()
@@ -7,11 +7,11 @@ export class CalcService {
     const expression = calcBody.expression
     const validate = this.validateExpression(expression)
     if (!validate) {
-      return {
-        "statusCode": 400,
-        "message": "Invalid expression provided",
-        "error": "Bad Request"
-      }
+      throw new BadRequestException({
+        statusCode: 400,
+        message: 'Invalid expression provided',
+        error: 'Bad Request',
+      })
     }
     const result = this.evaluateExpression(expression);
     return result;
